@@ -20,6 +20,10 @@
 (defvar gobgen-widget-recent)
 (defvar gobgen-widget-private)
 
+(defun string-join (list separator)
+  "Takes a list of string and joins them using delimiter."
+  (mapconcat (lambda (x) x) list separator))
+
 (defun string-has-prefix (full-str prefix-str)
   "Check if full-str has the prefix prefix-str"
 
@@ -342,3 +346,7 @@ Parameters:
 
   (use-local-map widget-keymap)
   (widget-setup))
+
+(provide 'gobgen)
+
+;;; gobgen.el ends here
