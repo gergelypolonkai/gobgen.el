@@ -268,8 +268,9 @@ Parameters:
                        :size 25
                        :format "Name:   %v"
 		       :notify (lambda (widget &rest ignore)
-				 (widget-value-set gobgen-widget-prefix (get-gobject-prefix (widget-value widget))))
-                       "g_example_object"))
+				 (save-excursion
+				   (widget-value-set gobgen-widget-prefix (get-gobject-prefix (widget-value widget)))))
+                       "gtk_example_object"))
 
   (widget-insert " ")
 
@@ -277,12 +278,15 @@ Parameters:
         (widget-create 'editable-field
                        :size 10
                        :format "Prefix: %v\n"
-                       "g"))
+                       "gtk"))
 
   (setq gobgen-widget-parent-name
         (widget-create 'editable-field
                        :size 25
                        :format "Parent: %v"
+		       :notify (lambda (widget &rest ignore)
+				 (save-excursion
+				   (widget-value-set gobgen-widget-parent-prefix (get-gobject-prefix (widget-value widget)))))
                        "g_object"))
 
   (widget-insert " ")
