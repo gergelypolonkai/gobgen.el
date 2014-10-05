@@ -267,6 +267,8 @@ Parameters:
 
   (widget-insert "GObject Creator\n\n")
 
+  (widget-insert "Generate a GObject class skeleton.\n\n")
+
   (setq gobgen-widget-name
         (widget-create 'editable-field
                        :size 25
@@ -274,6 +276,7 @@ Parameters:
 		       :notify (lambda (widget &rest ignore)
 				 (save-excursion
 				   (widget-value-set gobgen-widget-prefix (get-gobject-prefix (widget-value widget)))))
+		       :doc "The name of the new class, with its prefix included"
                        "gtk_example_object"))
 
   (widget-insert " ")
@@ -282,6 +285,7 @@ Parameters:
         (widget-create 'editable-field
                        :size 10
                        :format "Prefix: %v\n"
+		       :doc "Prefix of the new class. It updates automatically based on the name, so unless you need a namespace that consists of multiple parts (like my_ns), you should not touch this."
                        "gtk"))
 
   (setq gobgen-widget-parent-name
@@ -291,6 +295,7 @@ Parameters:
 		       :notify (lambda (widget &rest ignore)
 				 (save-excursion
 				   (widget-value-set gobgen-widget-parent-prefix (get-gobject-prefix (widget-value widget)))))
+		       :doc "Name of the parent class. Use g_object if you don't want to derive from something specific."
                        "g_object"))
 
   (widget-insert " ")
@@ -299,18 +304,21 @@ Parameters:
         (widget-create 'editable-field
                        :size 10
                        :format "Prefix: %v\n"
+		       :doc "Prefix of the parent class. Its automatically set value should suffice most of the time"
                        "g"))
 
   (widget-insert "\n")
 
   (setq gobgen-widget-recent
         (widget-create 'checkbox
+		       :doc "Use recent GLib's features, like defining a class with a private struct. Usually you would want this on."
                        t))
 
   (widget-insert " GLib >= 2.38\n")
 
   (setq gobgen-widget-private
         (widget-create 'checkbox
+		       :doc "Add a private struct for the object."
                        nil))
 
   (widget-insert " Has private members\n")
