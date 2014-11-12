@@ -179,7 +179,7 @@
 
    (if (and (not recent-glib) need-private)
        (concat
-	"    g_type_class_add_private(klass, sizeof(" ClassFullName "Private);\n"
+	"    g_type_class_add_private(klass, sizeof(" ClassFullName "Private));\n"
 	"\n"))
 
    "    gobject_class->finalize = " func-prefix "_finalize;\n"
