@@ -36,8 +36,18 @@ Barieri’s
 
 There are tons of features I plan, here is a brief list:
 
+* Properties
+* Signals
 * Pre-define methods, virtual or not
 * Add GTK-Doc blocks for for the generated code
+* Widget specialization
+** Standalone with custom `render()` method
+** Composite
+** Templated composite, that should also create a `GtkBuilder`
+   template
+* Add some help text for fields
+* GLib requirement check (if 2.38 is turned on)
+* Possibly add a `GET_PRIV` macro for 2.38+
 
 ## Requirements
 
