@@ -356,8 +356,13 @@ Parameters:
   (widget-insert " ")
 
   (widget-create 'push-button
-                 :notify (lambda (&rest ignore)
-                           (gobgen-widgets))
+                 :notify (lambda (widget _child &optional event)
+                           (widget-value-set gobgen-widget-name "gtk_example_object")
+                           (widget-value-set gobgen-widget-prefix "gtx")
+                           (widget-value-set gobgen-widget-parent-name "g_object")
+                           (widget-value-set gobgen-widget-parent-prefix "g")
+                           (widget-value-set gobgen-widget-recent t)
+                           (widget-value-set gobgen-widget-private nil))
                  "Reset form")
 
   (widget-insert " ")
