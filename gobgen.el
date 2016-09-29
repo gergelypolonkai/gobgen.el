@@ -5,7 +5,7 @@
 ;; Author: Gergely Polonkai <gergely@polonkai.eu>
 ;; Keywords: gobject, glib, gtk, helper, utilities
 ;; Version: 0.0.1
-;; Package-Requires: ((emacs "24.3"))
+;; Package-Requires: ((emacs "24.4"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 
 (require 'widget)
 (require 'wid-edit)
+(require 'subr-x)
 
 (defvar-local gobgen-widget-name nil
   "Widget for the class name.")
@@ -43,18 +44,7 @@
 (defvar-local gobgen-widget-private nil
   "Checkbox field for the private structure option.")
 
-(defun string-join (list separator)
-  "Takes a list of strings and joins them using delimiter."
-
-  (mapconcat (lambda (x) x) list separator))
-
-(defun string-has-prefix (full-str prefix-str)
-  "Check if FULL-STR has the prefix PREFIX-STR"
-
-  (let* ((prefix-length (length prefix-str)))
-    (string-equal prefix-str (substring full-str 0 prefix-length))))
-
-(defun get-gobject-prefix (class-name)
+(defun gobject-get-prefix (class-name)
   (car (split-string class-name "_")))
 
 (defun gobgen-gen-header (CLASS_FULL_NAME
@@ -260,10 +250,10 @@
          (parent-prefix-length (length parent-prefix))
          (class-prefix-length  (length class-prefix)))
 
-    (if (not (string-has-prefix parent-name (concat parent-prefix "_")))
+    (if (not (string-prefix-p (concat parent-prefix "_") parent-name))
         (message (concat "Parent (" parent-name ") and parent prefix (" parent-prefix ") don't match"))
 
-      (if (not (string-has-prefix class-name (concat class-prefix "_")))
+      (if (not (string-prefix-p (concat class-prefix "_") class-name))
           (message (concat "Class (" class-name ") and class prefix (" class-prefix ") don't match"))
 
         (let* ((parent-name (substring parent-name (+ parent-prefix-length 1)))
@@ -348,7 +338,7 @@
                        :notify (lambda (widget _child &optional event)
                                  (save-excursion
                                    (widget-value-set gobgen-widget-prefix
-                                                     (get-gobject-prefix (widget-value widget)))))
+                                                     (gobject-get-prefix (widget-value widget)))))
                        :doc "The name of the new class, with its prefix included"
                        "gtk_example_object"))
 
@@ -368,7 +358,7 @@
                        :notify (lambda (widget _child &optional event)
                                  (save-excursion
                                    (widget-value-set gobgen-widget-parent-prefix
-                                                     (get-gobject-prefix (widget-value widget)))))
+                                                     (gobject-get-prefix (widget-value widget)))))
                        :doc "Name of the parent class. Use g_object if you don't want to derive from something specific."
                        "g_object"))
 
