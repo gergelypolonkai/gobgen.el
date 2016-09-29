@@ -313,6 +313,7 @@
                                    recent-glib
                                    need-private)))))))
 
+;;;###autoload
 (defun gobgen ()
   "Create widgets window for GObject creation"
 
