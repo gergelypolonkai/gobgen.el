@@ -38,13 +38,16 @@
 (defvar-local gobgen-widget-parent-name nil
   "Widget for the name of the parent class.")
 (defvar-local gobgen-widget-parent-prefix nil
-  "Widget for the prefix of the parent class. It is auto-filled, but changeable.")
+  "Widget for the prefix of the parent class. It is auto-filled, but
+  changeable.")
 (defvar-local gobgen-widget-recent nil
   "Checkbox field for the recent GLib option.")
 (defvar-local gobgen-widget-private nil
   "Checkbox field for the private structure option.")
 
 (defun gobject-get-prefix (class-name)
+  "Guess the GObject prefix from CLASS-NAME."
+
   (car (split-string class-name "_")))
 
 (defun gobgen-gen-header (class-full-name-upper
@@ -58,7 +61,41 @@
                           parent-header
                           recent-glib
                           need-private)
-  "Generate the contents of a GObject header file."
+  "Generate the contents of a GObject header file.
+
+CLASS-FULL-NAME-UPPER is the full GObject name of the new class in
+UPPER_SNAKE_CASE notation.
+
+CLASS-PREFIX-UPPER is the GObject prefix of the new class in
+UPPER_SNAKE_CASE notation.
+
+CLASS-NAME-UPPER is the name of the new class without the
+prefix in UPPER_SNAKE_CASE notation.
+
+CLASS-FULL-NAME-CAMEL is the full name of the new object in
+CamelCase notation.
+
+FUNC-PREFIX is the function prefix for object methods.  Usually
+it is the same as the full object name in lower_snake_case
+notation.
+
+PARENT-PREFIX-SNAKE is the prefix of the parent object in
+snake_case notation.
+
+PARENT-PREFIX-CAMEL is the prefix of the parent object in
+CamelCase notation.
+
+PARENT-NAME-CAMEL is the name of the parent class without the
+prefix, in CamelCase notation.
+
+PARENT-HEADER is the name of the header file to be included in
+order to use the parent class.
+
+If RECENT-GLIB is 't', some features available from GLib 2.38
+will be used.
+
+If NEED-PRIVATE is 't', a private struct will be added to the new
+class."
 
   (concat
    "#ifndef __"
@@ -160,7 +197,41 @@
                         parent-name-upper
                         recent-glib
                         need-private)
-  "Generate the contents of a GObject source file."
+  "Generate the contents of a GObject source file.
+
+CLASS-FULL-NAME-UPPER is the full GObject name of the new class in
+UPPER_SNAKE_CASE notation.
+
+CLASS-PREFIX-UPPER is the GObject prefix of the new class in
+UPPER_SNAKE_CASE notation.
+
+CLASS-NAME-UPPER is the name of the new class without the
+prefix in UPPER_SNAKE_CASE notation.
+
+CLASS-NAME-SNAKE is the name of the new class without the prefix
+in snake_case notation.
+
+CLASS-FULL-NAME-CAMEL is the full name of the new object in
+CamelCase notation.
+
+FUNC-PREFIX is the function prefix for object methods.  Usually
+it is the same as the full object name in lower_snake_case
+notation.
+
+FILE-NAME-HEADER is the name of the header file generated for the
+new class.
+
+PARENT-PREFIX-UPPER is the prefix of the parent object in
+UPPER_SNAKE_CASE notation.
+
+PARENT-NAME-UPPER is the name of the parent class without the
+prefix in UPPER_SNAKE_CASE notation.
+
+If RECENT-GLIB is 't', some features available from GLib 2.38
+will be used.
+
+If NEED-PRIVATE is 't', a private struct will be added to the new
+class."
 
   (concat
    "#include \"" file-name-header "\"\n"
@@ -241,7 +312,21 @@
                          parent-name
                          recent-glib
                          need-private)
-  "Generate the header definition for a GObject derived clas."
+  "Generate the boilerplate of a new GObject derived class.
+
+CLASS-PREFIX is the prefix of the new class.
+
+CLASS-NAME is the name of the new class, without the prefix.
+
+PARENT-PREFIX is the prefix of the parent class.
+
+PARENT-NAME is the name of the parent class, without the prefix.
+
+If RECENT-GLIB is 't', some features available from GLib 2.38
+will be used.
+
+If NEED-PRIVATE is 't', a private struct will be added to the new
+class."
 
   (let* ((parent-prefix        (downcase parent-prefix))
          (parent-name          (downcase parent-name))
@@ -315,7 +400,7 @@
 
 ;;;###autoload
 (defun gobgen ()
-  "Create widgets window for GObject creation"
+  "Create widgets window for GObject creation."
 
   (interactive)
 
